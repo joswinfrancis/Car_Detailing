@@ -1,0 +1,11 @@
+<odoo>
+      <record id="action_report_customer_service_slip" model="ir.actions.report">
+        <field name="name">Customer Job Card</field>
+        <field name="model">register.customer</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">car_detailing_service.report_customer_job_card</field>
+        <field name="report_file">car_detailing_service.report_customer_job_card</field>
+        <field name="binding_model_id" ref="model_register_customer"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

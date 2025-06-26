@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!--    View for model customer details -->
+    <record id="staff_position_view_form" model="ir.ui.view">
+        <field name="name">staff.position.view.form</field>
+        <field name="model">staff.position</field>
+        <field name="arch" type="xml">
+            <form string="Staff Position">
+                <sheet string="Staff Position">
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"
+                           groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="staff_position_view_tree" model="ir.ui.view">
+        <field name="name">staff.position.view.tree</field>
+        <field name="model">staff.position</field>
+        <field name="arch" type="xml">
+            <tree string="Staff Position">
+                <field name="name" string="Name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="staff_position_action" model="ir.actions.act_window">
+        <field name="name">Staff Position</field>
+        <field name="res_model">staff.position</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Staff Positions.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="staff_position_menu" name="Staff Position"
+              parent="staff_heading_menu"
+              action="staff_position_action"
+              groups="car_detailing_service.car_detailing_service_manager"
+    />
+
+</odoo>

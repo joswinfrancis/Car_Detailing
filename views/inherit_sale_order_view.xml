@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_order_form_inherit" model="ir.ui.view">
+        <field name="name">view.order.form.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="vehicle_name_id"/>
+            </xpath>
+            <xpath expr="//notebook/page[@name='other_information']" position="before">
+                <page string="Internal Services" name="internal_services">
+                    <field name="internal_service_id"/>
+                </page>
+            </xpath>
+            <xpath expr="//notebook/page[@name='customer_signature']" position="replace"/>
+            <xpath expr="//notebook/page[@name='order_lines']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//notebook/page[@name='internal_services']" position="after">
+                <page string="External Services" name="external_services">
+                    <field name="external_service_id"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_open_sale_order" model="ir.actions.act_window">
+        <field name="name">Quotation</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a sale order.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="order_menu"
+              name="Order"
+              parent="main_car_detailing_menu"
+              sequence="1"
+    />
+    <menuitem id="order_sub_menu"
+              name="Order"
+              parent="order_menu"
+              action="action_open_sale_order"
+    />
+</odoo>

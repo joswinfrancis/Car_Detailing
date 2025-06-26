@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_customer_job_card">
+        <t t-call="web.basic_layout">
+            <t t-foreach="docs" t-as="doc">
+                <main>
+                    <div class="page">
+                        <!-- Header -->
+                        <div class="row">
+                            <div class="col-6">
+                                <strong>CAR DETAILING COMPANY</strong>
+                                <br/>
+                                <span>+1-9878-989-989</span>
+                                <br/>
+                                <span>Town Mall 458 Road</span>
+                                <br/>
+                                <span>Airport Road Calicut</span>
+                            </div>
+                            <div class="col-6 text-right">
+                                <h4>JOB CARD</h4>
+                                <strong>Reference No.:</strong>
+                                <t t-esc="doc.reference"/>
+                                <br/>
+                            </div>
+                        </div>
+
+                        <hr/>
+
+                        <!-- Customer Info -->
+                        <div class="col-6">
+                            <h5>Customer Information</h5>
+                            <p>
+                                <strong>Name:</strong>
+                                <t t-esc="doc.customer_name"/>
+                            </p>
+                            <p>
+                                <strong>Address:</strong>
+                                <t t-esc="doc.address"/>
+                            </p>
+                            <p>
+                                <strong>Contact:</strong>
+                                <t t-esc="doc.mobile_no"/>
+                            </p>
+                            <p>
+                                <strong>Email:</strong>
+                                <t t-esc="doc.email"/>
+                            </p>
+                        </div>
+                        <br/>
+
+                        <hr/>
+
+                        <!-- Job Details -->
+                        <div class="col-6">
+                            <p>
+                                <strong>Service Note:</strong>
+                                <t t-esc="doc.service_notes"/>
+
+                            </p>
+                            <strong>Person in Charge:</strong>
+                            <t t-esc="doc.assigned_to_id.staff_name"/>
+                        </div>
+                        <h5>Vehicle Details</h5>
+                        <table class="table table-bordered" style="background-color:#f0e9d8;">
+                            <thead>
+                                <tr>
+                                    <th>Vehicle Name</th>
+                                    <th>Plate Number</th>
+                                    <th>Meter Reading(km)</th>
+                                    <th>Manufacturing Year</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-if="doc">
+                                    <t t-foreach="doc" t-as="record">
+                                        <tr>
+                                            <td>
+                                                <t t-esc="record.vehicle_name_id.model_name"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="record.vehicle_plate"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="record.meter_reading"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="record.manufacturing_year"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                <t t-else="">
+                                    <tr>
+                                        <td colspan="4" style="text-align: center; font-weight: bold;">No data available
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <h5>Internal Service Details</h5>
+                        <table class="table table-bordered" style="background-color:#f0e9d8;">
+                            <thead>
+                                <tr>
+                                    <th>Service Name</th>
+                                    <th>Service Description</th>
+                                    <th>Service charge</th>
+                                    <!--                                    <th>Materials Used</th>-->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-if="doc.internal_service_id">
+                                    <t t-foreach="doc.internal_service_id" t-as="record">
+                                        <tr>
+                                            <td>
+                                                <t t-esc="record.service_name"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="record.service_description"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="record.service_charge"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                <t t-else="">
+                                    <tr>
+                                        <td colspan="4" style="text-align: center; font-weight: bold;">No data available
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <h5>Materials Used For Internal Services</h5>
+                        <table class="table table-bordered" style="background-color:#f0e9d8;">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Product Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-if="doc.internal_service_id">
+                                    <t t-foreach="doc.internal_service_id" t-as="record">
+                                        <t t-foreach="record.product_id" t-as="product">
+                                            <tr>
+                                                <td>
+                                                    <t t-esc="product.product_name"/>
+                                                </td>
+                                                <td>
+                                                    <t t-esc="product.product_price"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                </t>
+                                <t t-else="">
+                                    <tr>
+                                        <td colspan="4" style="text-align: center; font-weight: bold;">No data available
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <h6 style="text-align:right;">Total Internal Service Cost</h6>
+                        <p style="text-align:right;">
+                            <t t-esc="doc.total_internal_service_cost"/>
+                        </p>
+                        <h5>External Service Details</h5>
+                        <table class="table table-bordered" style="background-color:#f0e9d8;">
+                            <thead>
+                                <tr>
+                                    <th>Service Name</th>
+                                    <th>Service Provider Name</th>
+                                    <th>Service Description</th>
+                                    <th>Service charge</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-if="doc.external_service_id">
+                                    <t t-foreach="doc.external_service_id" t-as="record">
+                                        <tr>
+                                            <td>
+                                                <t t-esc="record.service_name"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="record.service_provider_name"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="record.service_description"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="record.service_charge"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                <t t-else="">
+                                    <tr>
+                                        <td colspan="4" style="text-align: center; font-weight: bold;">No data available
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <h5>Materials Used For External Services</h5>
+                        <table class="table table-bordered" style="background-color:#f0e9d8;">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Product Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-if="doc.external_service_id">
+                                    <t t-foreach="doc.external_service_id" t-as="record">
+                                        <t t-foreach="record.product_id" t-as="product">
+                                            <tr>
+                                                <td>
+                                                    <t t-esc="product.product_name"/>
+                                                </td>
+                                                <td>
+                                                    <t t-esc="product.product_price"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                </t>
+                                <t t-else="">
+                                    <tr>
+                                        <td colspan="4" style="text-align: center; font-weight: bold;">No data available
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <h6 style="text-align:right;">Total External Service Cost</h6>
+                        <p style="text-align:right;">
+                            <t t-esc="doc.total_external_service_cost"/>
+                        </p>
+                        <!-- Totals -->
+                        <div class="row mt-3">
+                            <div class="col-6">
+                                <p>
+                                    <strong>Authorized Signature</strong>
+                                </p>
+                                <p>______________________</p>
+                            </div>
+                            <div class="col-6 text-right">
+                                <p>Total internal service cost:
+                                    <t t-esc="doc.total_internal_service_cost"/>
+                                </p>
+                                <p>Total external service cost:
+                                    <t t-esc="doc.total_external_service_cost"/>
+                                </p>
+                                <p>Subtotal:
+                                    <span t-esc="doc.sub_total"/>
+                                </p>
+                                <p>Taxes:
+
+                                </p>
+                                <p>
+                                    <strong>Total Amount:</strong>
+                                    <span t-esc="doc.sub_total"/>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </t>
+        </t>
+    </template>
+</odoo>

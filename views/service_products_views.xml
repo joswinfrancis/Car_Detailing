@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!--    View for model customer details -->
+    <record id="service_products_view_form" model="ir.ui.view">
+        <field name="name">service.products.view.form</field>
+        <field name="model">service.products</field>
+        <field name="arch" type="xml">
+            <form string="Service Products">
+                <sheet string="Service Products">
+                    <div class="oe_title">
+                        <h5>
+                            <field name="product_code"/>
+                        </h5>
+                        <h13>
+                            <field name="product_name"
+                                   placeholder="Name of the Product"/>
+                        </h13>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="product_price"/>
+                            <field name="currency_id"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"
+                           groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="service_products_view_tree" model="ir.ui.view">
+        <field name="name">service.products.view.tree</field>
+        <field name="model">service.products</field>
+        <field name="arch" type="xml">
+            <tree string="Service Products">
+                <field name="product_name" string="Product Name"/>
+                <field name="product_price" string="Product Price"/>
+            </tree>
+        </field>
+    </record>
+    <record id="service_products_action" model="ir.actions.act_window">
+        <field name="name">Service Products</field>
+        <field name="res_model">service.products</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Service Products.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="service_products_menu" name="Service Products"
+              parent="services_and_products_heading"
+              sequence="13"
+              action="service_products_action"/>
+
+</odoo>

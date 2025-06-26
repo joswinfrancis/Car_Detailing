@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!--    View for model customer details -->
+    <record id="service_feedback_view_form" model="ir.ui.view">
+        <field name="name">service.feedback.view.form</field>
+        <field name="model">service.feedback</field>
+        <field name="arch" type="xml">
+            <form string="Service Feedback">
+                <header>
+                    <button name="action_feedback_updated"
+                            type="object"
+                            string="Update Feedback"
+                            class="btn-success"
+                    />
+                </header>
+                <sheet string="Service Feedback">
+                    <div class="oe_title">
+                        <h6>
+                            <field name="feedback_date"/>
+                        </h6>
+                        <h1>
+                            <field name="customer_id"
+                                   placeholder="Name of the Customer"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="address"/>
+                            <field name="mobile_no"/>
+                            <field name="email"/>
+                        </group>
+                        <group>
+                            <field name="comments"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Rating">
+                            <group>
+                                <group>
+                                    <field name="overall_rating"
+                                           string="How satisfied are you with the overall detailing service?"/>
+                                </group>
+                                <group>
+                                    <field name="rating_pricing"
+                                           string="How satisfied are you with our pricing?"/>
+                                </group>
+                                <group>
+                                    <field name="rating_staff"
+                                           string="How satisfied are you interacting with our staff?"/>
+                                </group>
+                                <group>
+                                    <field name="recommend"
+                                           string="Would you recommend our services to friends or family?"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"
+                           groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="service_feedback_view_kanban" model="ir.ui.view">
+        <field name="name">service.feedback.view.kanban</field>
+        <field name="model">service.feedback</field>
+        <field name="arch" type="xml">
+            <kanban class="oe_background_grey o_kanban_dashboard o_project_kanban">
+                <field name="customer_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_module_vignette">
+                            <div t-attf-class="oe_kanban_global_click">
+                                <div class="o_project_kanban_main">
+                                    <div class="o_kanban_primary_left">
+                                        <div class="oe_kanban_details">
+                                            <div class="o_primary">
+                                                <span>
+                                                    <t t-esc="record.overall_rating"/>
+                                                </span>
+                                            </div>
+                                            <p class="oe_module_name">
+                                                <field name="customer_id"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    <record id="service_feedback_view_tree" model="ir.ui.view">
+        <field name="name">service.feedback.view.tree</field>
+        <field name="model">service.feedback</field>
+        <field name="arch" type="xml">
+            <tree string="Service Feedback">
+                <field name="customer_id" string="Customer Name"/>
+                <field name="feedback_date" string="Feedback Date"/>
+                <field name="overall_rating" string="Rating"/>
+            </tree>
+        </field>
+    </record>
+    <record id="service_feedback_action" model="ir.actions.act_window">
+        <field name="name">Service Feedback</field>
+        <field name="res_model">service.feedback</field>
+        <field name="view_mode">kanban,form,tree</field>
+        <!--        <field name="search_view_id" ref="service_feedback_view_search"/>-->
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new customer.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="customer_feedback_menu" name="Customer Feedbacks"
+              parent="main_car_detailing_menu"
+              action="service_feedback_action"/>
+              sequence="3"/>
+
+</odoo>

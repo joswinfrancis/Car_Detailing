@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!--    View for model customer details -->
+    <record id="vehicle_tag_view_form" model="ir.ui.view">
+        <field name="name">vehicle.tag.view.form</field>
+        <field name="model">vehicle.tag</field>
+        <field name="arch" type="xml">
+            <form string="Vehicle Tag">
+                <sheet string="Vehicle Tag">
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"
+                           groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="vehicle_tag_view_tree" model="ir.ui.view">
+        <field name="name">vehicle.tag.view.tree</field>
+        <field name="model">vehicle.tag</field>
+        <field name="arch" type="xml">
+            <tree string="Vehicle Tag">
+                <field name="name" string="Name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="vehicle_tag_action" model="ir.actions.act_window">
+        <field name="name">Vehicle Tag</field>
+        <field name="res_model">vehicle.tag</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Vehicle Tags.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="vehicle_tag_menu" name="Vehicle Tag"
+              parent="vehicle_details_menu"
+              action="vehicle_tag_action"
+              groups="car_detailing_service.car_detailing_service_manager"
+    />
+
+</odoo>

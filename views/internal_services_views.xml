@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!--    View for model customer details -->
+    <record id="internal_services_view_form" model="ir.ui.view">
+        <field name="name">internal.services.view.form</field>
+        <field name="model">internal.services</field>
+        <field name="arch" type="xml">
+            <form string="Internal Services">
+                <sheet string="Internal Services">
+                    <group>
+                        <group>
+                            <field name="service_name"
+                                   placeholder="Name of the Service"/>
+                        </group>
+                        <group>
+                            <field name="service_description"/>
+                        </group>
+                        <group>
+                            <field name="currency_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Materials Used">
+                            <group>
+                                <group>
+                                    <field name="product_id"/>
+                                    <field style="text-align: right;" name="product_total_price"/>
+                                    <field name="service_charge"/>
+                                    <field name="total_service_cost"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"
+                           groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="internal_services_view_tree" model="ir.ui.view">
+        <field name="name">internal.services.view.tree</field>
+        <field name="model">internal.services</field>
+        <field name="arch" type="xml">
+            <tree string="Internal Services">
+                <field name="service_name" string="Service Name"/>
+                <field name="service_description" string="Service Description"/>
+                <field name="service_charge" string="Service Charge"/>
+                <field name="product_id" string="Materials Used"/>
+            </tree>
+        </field>
+    </record>
+    <record id="internal_services_action" model="ir.actions.act_window">
+        <field name="name">Internal Services</field>
+        <field name="res_model">internal.services</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Internal Services.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="internal_services_menu" name="Internal Services"
+              parent="services_and_products_heading"
+              sequence="11"
+              action="internal_services_action"/>
+
+</odoo>
