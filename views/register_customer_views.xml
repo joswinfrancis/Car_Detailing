@@ -56,6 +56,15 @@
                     />
                 </header>
                 <sheet string="Register Customer">
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object"
+                                name="action_view_quotation"
+                                icon="fa-file-quotation"
+                                class="oe_stat_button"
+                                invisible="state != 'draft'">
+                            <field name="customer_name" widget="statinfo" string="Quotation"/>
+                        </button>
+                    </div>
                     <div class="oe_title">
                         <h3>
                             <field name="reference"/>
@@ -118,6 +127,28 @@
                                 </group>
                             </group>
                         </page>
+                        <page string="Work Progress">
+                            <group>
+                                <group string="Planned Internal Work">
+                                    <field name="internal_service_id">
+                                        <tree string="Planned Work"
+                                              editable="bottom">
+                                            <field name="product_id"/>
+                                            <field name="is_completed"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                                <group string="Planned External Work">
+                                    <field name="external_service_id">
+                                        <tree string="Planned Work"
+                                              editable="bottom">
+                                            <field name="product_id"/>
+                                            <field name="is_completed"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </group>
+                        </page>
                         <page string="Other Info">
                             <group>
                                 <group string="Bill Details">
@@ -128,22 +159,6 @@
                         </page>
                     </notebook>
                 </sheet>
-                <div class="oe_button_box" name="button_box">
-                    <button type="object"
-                            name="action_view_invoice"
-                            icon="fa-file-invoice"
-                            class="oe_stat_button"
-                            invisible="invoice_id == False">
-                        <field name="invoice_id" widget="statinfo" string="Invoice"/>
-                    </button>
-                    <button type="object"
-                            name="action_view_quotation"
-                            icon="fa-file-quotation"
-                            class="oe_stat_button"
-                            invisible="state != 'draft'">
-                        <field name="customer_name" widget="statinfo" string="Quotation"/>
-                    </button>
-                </div>
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers"
                            groups="base.group_user"/>

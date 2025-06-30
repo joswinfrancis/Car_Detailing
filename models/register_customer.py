@@ -49,7 +49,7 @@ class RegisterCustomer(models.Model):
     starting_date = fields.Date(string="Starting Date")
     ending_date = fields.Date(string="Expected Delivery Date")
     service_notes = fields.Text(string="Service Note")
-    sub_total = fields.Monetary(compute='_compute_sub_total', string="Sub Total")
+    sub_total = fields.Monetary(compute='_compute_sub_total', string="Sub Total", store=True)
     total_internal_service_cost = fields.Monetary(compute='_compute_total_internal_service_cost', string="Total Internal Service Cost")
     total_external_service_cost = fields.Monetary(compute='_compute_total_external_service_cost', string="Total External Service Cost")
     internal_service_id = fields.Many2many('internal.services', string='Internal Services')
@@ -59,7 +59,7 @@ class RegisterCustomer(models.Model):
                                   default=lambda self: self.env.ref('base.INR'))
     sale_order_id = fields.Many2one('sale.order', string='order reference', required=True)
 
-    invoice_id = fields.Many2one('account.move', string='Invoice', readonly=True)
+
 
     @api.depends('internal_service_id', 'external_service_id')
     def _compute_sub_total(self):
@@ -94,16 +94,31 @@ class RegisterCustomer(models.Model):
     def action_work_done(self):
         self.state = 'work_done'
 
+
     def action_delivered(self):
         self.ensure_one()
 
-        if not self.invoice_id:
+        if not self.sale_order_id:
+            raise UserError("No Sale Order linked to this record.")
+
+        # Get valid (not cancelled) customer invoices from the sale order
+        invoice = self.sale_order_id.invoice_ids.filtered(
+            lambda inv: inv.move_type == 'out_invoice' and inv.state != 'cancel'
+        )
+
+        if not invoice:
             raise UserError("Cannot mark as delivered: Invoice not created.")
 
-        if self.invoice_id.state != 'posted':
+        # Get the posted invoice(s)
+        posted_invoice = invoice.filtered(lambda inv: inv.state == 'posted')
+
+        if not posted_invoice:
             raise UserError("Cannot mark as delivered: Invoice not confirmed (posted).")
 
-        if self.invoice_id.amount_residual > 0:
+        # Check for pending payment
+        unpaid_invoice = posted_invoice.filtered(lambda inv: inv.amount_residual > 0)
+
+        if unpaid_invoice:
             raise UserError("Cannot mark as delivered: Invoice payment is still pending.")
 
         self.state = 'delivered'
@@ -126,76 +141,14 @@ class RegisterCustomer(models.Model):
         return records
 
     def action_create_invoice(self):
-        for record in self:
-            if not record.customer_name:
-                raise UserError("Customer is missing.")
-            if record.invoice_id:
-                raise UserError("Invoice already created.")
-
-            # Find or create customer partner
-            partner = record.partner_id
-            if not partner:
-                raise UserError("Related customer not found in Contacts.")
-
-            journal_id = self.env['ir.config_parameter'].sudo().get_param(
-                'fleet_car_workshop.invoice_journal_type')
-            if not journal_id:
-                journal_id = self.env['account.journal'].search([
-                    *self.env['account.journal']._check_company_domain(
-                        self.env.company), ('type', '=', 'sale'), ], limit=1)
-
-            invoice_lines = []
-
-            #internal service line
-            for product in record.internal_service_id:
-                invoice_lines.append((0, 0, {
-                    'name': product.service_name,
-                    'quantity': 1,
-                    'price_unit': product.total_service_cost,
-                    'discount': record.discount,
-                }))
-
-            #external service line
-            for product in record.external_service_id:
-                invoice_lines.append((0, 0, {
-                    'name': product.service_name,
-                    'quantity': 1,
-                    'price_unit': product.total_service_cost,
-                    'discount': record.discount,
-                }))
-
-            invoice = self.env['account.move'].create({
-                'move_type': 'out_invoice',
-                'partner_id': partner.id,
-                'invoice_origin': record.reference,
-                'journal_id': int(journal_id),
-                'invoice_line_ids':invoice_lines,
-                'currency_id': record.currency_id.id,
-
-            })
-
-            record.invoice_id = invoice.id
-
-            # Redirect to the invoice
-            return {
-                'name': 'Customer Invoice',
-                'type': 'ir.actions.act_window',
-                'res_model': 'account.move',
-                'view_mode': 'form',
-                'res_id': invoice.id,
-                'target': 'current',
-            }
-
-    def action_view_invoice(self):
         self.ensure_one()
-        if not self.invoice_id:
-            return
+
         return {
-            'name': 'Customer Invoice',
+            'name': 'Sale Order',
             'type': 'ir.actions.act_window',
             'view_mode': 'form',
-            'res_model': 'account.move',
-            'res_id': self.invoice_id.id,
+            'res_model': 'sale.order',
+            'res_id': self.sale_order_id.id,
             'target': 'current',
         }
 

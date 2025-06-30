@@ -11,7 +11,7 @@
                         <group>
                             <field name="service_provider_name"
                                    placeholder="Name of the Service Provider"/>
-                            <field name="service_name"
+                            <field name="product_id"
                                    placeholder="Name of the Service"/>
                         </group>
                         <group>
@@ -25,7 +25,7 @@
                         <page string="Materials Used">
                             <group>
                                 <group>
-                                    <field name="product_id"/>
+                                    <field name="materials_id"/>
                                     <field style="text-align: right;" name="product_total_price"/>
                                     <field name="service_charge"/>
                                     <field name="total_service_cost"/>
@@ -47,11 +47,11 @@
         <field name="model">external.services</field>
         <field name="arch" type="xml">
             <tree string="External Services">
-                <field name="service_name" string="Service Name"/>
+                <field name="product_id" string="Service Name"/>
                 <field name="service_provider_name" string="Service Provider Name"/>
                 <field name="service_description" string="Service Description"/>
                 <field name="service_charge" string="Service Charge"/>
-                <field name="product_id" string="Materials Used"/>
+                <field name="materials_id" string="Materials Used"/>
             </tree>
         </field>
     </record>

@@ -2,7 +2,7 @@
 <odoo>
     <menuitem id="main_car_detailing_menu"
               name="Detailing shop"
-              web_icon=""
+              web_icon="car_detailing_service,static/description/icon.png"
               sequence="35"
     />
 

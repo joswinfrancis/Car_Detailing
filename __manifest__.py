@@ -4,8 +4,8 @@
     'name': 'Car Detailing Shop',
     'version': '17.0.1.0.0',
     'category': 'Services',
-    'summary': 'A Complete Vehicle Service Operations & Reports',
-    'description': """This module helps to manage automobile services with
+    'summary': 'A Complete Vehicle Detailing Service Operations & Reports',
+    'description': """This module helps to manage vehicle detailing services with
      great ease. Keep track of everything, like vehicle owner details,
      Works assigned, Bill details of service provided, etc.""",
     'author': 'Jo',
@@ -30,6 +30,7 @@
         'views/staff_positions_views.xml',
         'views/detailing_vehicle_views.xml',
         'views/vehicle_tag_views.xml',
+        'views/product_template_view.xml',
 
     ],
     'license': 'AGPL-3',
