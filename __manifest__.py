@@ -31,8 +31,16 @@
         'views/detailing_vehicle_views.xml',
         'views/vehicle_tag_views.xml',
         'views/product_template_view.xml',
+        'views/res_partner_view.xml',
+        'wizard/whatsapp_send_message_views.xml',
 
     ],
+    'assets': {
+        'web.assets_backend': [
+            'car_detailing_service/static/src/js/image_preview_widget.js',
+            'car_detailing_service/static/src/xml/widget_image_preview.xml',
+        ],
+    },
     'license': 'AGPL-3',
     'installable': True,
     'auto_install': False,

@@ -86,7 +86,9 @@ class SaleOrderInherit(models.Model):
 
             if 'internal_service_id' in vals or 'external_service_id' in vals:
 
-                if order.state == 'sale':
+                was_sale = order.state == 'sale'
+
+                if was_sale:
                     order.action_cancel()
                     order.state = 'draft'
 
@@ -138,6 +140,9 @@ class SaleOrderInherit(models.Model):
                 # External services
                 for service in order.external_service_id:
                     add_service_line_if_not_exists(service)
+
+                if was_sale:
+                    order.action_confirm()
 
         return res
 

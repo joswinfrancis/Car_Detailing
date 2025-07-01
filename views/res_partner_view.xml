@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="res_partner_view_action" model="ir.actions.act_window">
+        <field name="name">Customers</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+    <menuitem id="customers_menu"
+              name="Customers"
+              parent="order_menu"
+              action="res_partner_view_action"
+              sequence="2"/>
+
+</odoo>

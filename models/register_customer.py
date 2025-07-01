@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 ###############################################################################
-from odoo import fields, models, api
-from odoo.tools.translate import _
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
-from datetime import date
 
 
 class RegisterCustomer(models.Model):
@@ -86,6 +84,10 @@ class RegisterCustomer(models.Model):
         self.state = 'cancelled'
 
     def action_start_work(self):
+
+        if self.sale_order_id.state == 'draft':
+            raise UserError('Sale Order not Confirmed | Confirm Sale Order before starting work')
+
         self.state = 'work_started'
 
     def action_work_in_progress(self):
@@ -163,6 +165,18 @@ class RegisterCustomer(models.Model):
             'res_id': self.sale_order_id.id,
             'target': 'current',
         }
+
+    def action_send_msg(self):
+        """This function is called when the user clicks the
+         'Send WhatsApp Message' button on a partner's form view. It opens a
+          new wizard to compose and send a WhatsApp message."""
+        return {'type': 'ir.actions.act_window',
+                'name': _('Whatsapp Message'),
+                'res_model': 'whatsapp.send.message',
+                'target': 'new',
+                'view_mode': 'form',
+                'view_type': 'form',
+                'context': {'default_customer_id': self.id}, }
 
     def write(self, vals):
         res = super().write(vals)
